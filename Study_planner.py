@@ -17,20 +17,20 @@ class StudentInput(BaseModel):
     topics: List[Topic]
   import math
 
-# 📉 Forgetting curve (retention)
+#  Forgetting curve (retention)
 def retention_score(days):
     return math.exp(-0.3 * days)
 
-# 🎯 Weakness calculation
+#  Weakness calculation
 def weakness_score(topic):
     retention = retention_score(topic.last_studied)
     return (1 - topic.accuracy) * topic.difficulty + (1 - retention)
 
-# 🔥 Priority score
+#  Priority score
 def priority_score(topic):
     return weakness_score(topic) * topic.importance
 
-# 📅 Generate study plan
+#  Generate study plan
 def generate_plan(topics, daily_hours):
     topics_sorted = sorted(topics, key=lambda x: priority_score(x), reverse=True)
 
@@ -83,7 +83,7 @@ student = StudentInput(**sample_data)
 plan = generate_plan(student.topics, student.daily_hours)
 
 plan
-# 🧠 Add memory tracking to each topic
+#  Add memory tracking to each topic
 
 def get_topic_state(topic):
     return {
@@ -97,7 +97,7 @@ def get_topic_state(topic):
 def show_memory(topics):
     return [get_topic_state(t) for t in topics]
   show_memory(student.topics)
-# 📊 Error log system
+#  Error log system
 error_log = []
 
 def log_error(topic_name, error_type):
@@ -116,7 +116,7 @@ log_error("Human Physiology", "silly")
 log_error("Thermodynamics", "conceptual")
 
 get_error_summary()
-# 🔄 Update after quiz (auto-rebalancing)
+#  Update after quiz (auto-rebalancing)
 
 def update_after_quiz(topic, new_accuracy):
     # Update accuracy
@@ -142,7 +142,7 @@ def enhanced_priority(topic):
 
 for t in topics_sorted:
     print(t.name, enhanced_priority(t))
-  # 🚨 Identify topics that need urgent revision
+  #  Identify topics that need urgent revision
 
 def get_revision_alerts(topics, threshold=0.5):
     alerts = []
@@ -155,7 +155,7 @@ def get_revision_alerts(topics, threshold=0.5):
                 "topic": topic.name,
                 "subject": topic.subject,
                 "retention": round(retention, 2),
-                "message": f"⚠️ Revise {topic.name} now!"
+                "message": f" Revise {topic.name} now!"
             })
 
     return alerts
@@ -183,14 +183,14 @@ def smart_revision_alerts(topics):
 final_plan = generate_plan(student.topics, student.daily_hours)
 alerts = smart_revision_alerts(student.topics)
 
-print("📅 DAILY PLAN:")
+print(" DAILY PLAN:")
 for p in final_plan:
     print(p)
 
-print("\n🚨 REVISION ALERTS:")
+print("\n REVISION ALERTS:")
 for a in alerts:
     print(a)
-  # 🎯 NEET Exam Mode (Last days strategy)
+  #  NEET Exam Mode (Last days strategy)
 
 def exam_mode_plan(topics, daily_hours, exam_days_left):
     if exam_days_left > 7:
@@ -226,16 +226,16 @@ def exam_mode_plan(topics, daily_hours, exam_days_left):
     return plan
   exam_mode_plan(student.topics, 5, exam_days_left=5)
 def final_ai_system(student):
-    print("📊 MEMORY STATUS:")
+    print(" MEMORY STATUS:")
     for m in show_memory(student.topics):
         print(m)
 
-    print("\n🚨 ALERTS:")
+    print("\n ALERTS:")
     alerts = smart_revision_alerts(student.topics)
     for a in alerts:
         print(a)
 
-    print("\n📅 STUDY PLAN:")
+    print("\n STUDY PLAN:")
     plan = exam_mode_plan(student.topics, student.daily_hours, student.exam_days_left)
     for p in plan:
         print(p)
@@ -247,15 +247,15 @@ def dashboard():
     alerts = smart_revision_alerts(student.topics)
     plan = exam_mode_plan(student.topics, student.daily_hours, student.exam_days_left)
 
-    memory_text = "📊 MEMORY STATUS\n"
+    memory_text = " MEMORY STATUS\n"
     for m in memory:
         memory_text += f"{m['name']} → Retention: {m['retention']}\n"
 
-    alerts_text = "\n🚨 ALERTS\n"
+    alerts_text = "\n ALERTS\n"
     for a in alerts:
         alerts_text += f"{a['topic']} → Priority: {a['priority']}\n"
 
-    plan_text = "\n📅 STUDY PLAN\n"
+    plan_text = "\n STUDY PLAN\n"
     for p in plan:
         plan_text += f"{p['topic']} ({p.get('type','Study')}) → {p['hours']} hrs\n"
     return memory_text + alerts_text + plan_text
@@ -269,8 +269,8 @@ def dashboard_ui():
     alerts = smart_revision_alerts(student.topics)
     plan = exam_mode_plan(student.topics, student.daily_hours, student.exam_days_left)
 
-    # 📊 MEMORY SECTION (with color)
-    memory_html = "<h2>📊 Memory Status</h2>"
+    #  MEMORY SECTION (with color)
+    memory_html = "<h2> Memory Status</h2>"
     for m in memory:
         color = "green" if m['retention'] > 0.7 else "orange" if m['retention'] > 0.4 else "red"
         memory_html += f"""
@@ -279,8 +279,8 @@ def dashboard_ui():
         </div>
         """
 
-    # 🚨 ALERT SECTION
-    alert_html = "<h2>🚨 Alerts</h2>"
+    #  ALERT SECTION
+    alert_html = "<h2> Alerts</h2>"
     for a in alerts:
         alert_html += f"""
         <div style="padding:10px; margin:5px; border-radius:10px; background:#ff4d4d; color:white;">
@@ -288,8 +288,8 @@ def dashboard_ui():
         </div>
         """
 
-    # 📅 PLAN SECTION
-    plan_html = "<h2>📅 Study Plan</h2>"
+    #  PLAN SECTION
+    plan_html = "<h2> Study Plan</h2>"
     for p in plan:
         plan_html += f"""
         <div style="padding:10px; margin:5px; border-radius:10px; background:#4CAF50; color:white;">
@@ -300,7 +300,7 @@ def dashboard_ui():
     return memory_html + alert_html + plan_html
 memory = show_memory(student.topics)
 
-memory_html = "<h2>📊 Memory Status</h2>"
+memory_html = "<h2> Memory Status</h2>"
 
 for m in memory:
     memory_html += f"""
@@ -326,19 +326,19 @@ def plot_retention(topics):
     scores = [retention_score(t.last_studied) for t in topics]
     return round(sum(scores) / len(scores), 2)
     score = overall_memory_score(student.topics)
-    score_html = f"<h2>🧠 Overall Memory Score: {score * 100}%</h2>"
+    score_html = f"<h2> Overall Memory Score: {score * 100}%</h2>"
     def dashboard_ui():
 
     memory = show_memory(student.topics)
     alerts = smart_revision_alerts(student.topics)
     plan = exam_mode_plan(student.topics, student.daily_hours, student.exam_days_left)
 
-    # 🧠 Score
+    #  Score
     score = overall_memory_score(student.topics)
-    score_html = f"<h2>🧠 Overall Memory Score: {score * 100}%</h2>"
+    score_html = f"<h2> Overall Memory Score: {score * 100}%</h2>"
 
-    # 📊 Memory
-    memory_html = "<h2>📊 Memory Status</h2>"
+    #  Memory
+    memory_html = "<h2> Memory Status</h2>"
     for m in memory:
         memory_html += f"""
         <div style="margin:10px;">
@@ -348,8 +348,8 @@ def plot_retention(topics):
         </div>
         """
 
-    # 🚨 Alerts
-    alert_html = "<h2>🚨 Alerts</h2>"
+    #  Alerts
+    alert_html = "<h2> Alerts</h2>"
     for a in alerts:
         alert_html += f"""
         <div style="padding:10px; background:red; color:white; margin:5px;">
@@ -357,8 +357,8 @@ def plot_retention(topics):
         </div>
         """
 
-    # 📅 Plan
-    plan_html = "<h2>📅 Study Plan</h2>"
+    #  Plan
+    plan_html = "<h2> Study Plan</h2>"
     for p in plan:
         plan_html += f"""
         <div style="padding:10px; background:green; color:white; margin:5px;">
@@ -379,15 +379,15 @@ def dashboard_ui():
     alerts = smart_revision_alerts(student.topics)
     plan = exam_mode_plan(student.topics, student.daily_hours, student.exam_days_left)
 
-    # 🧠 Overall Score
+    #  Overall Score
     score = overall_memory_score(student.topics)
     score_html = f"""
-    <h2>🧠 Overall Memory Score: {score * 100}%</h2>
-    <h3>🎯 Focus: Weak topics prioritized for maximum retention</h3>
+    <h2> Overall Memory Score: {score * 100}%</h2>
+    <h3> Focus: Weak topics prioritized for maximum retention</h3>
     """
 
-    # 📊 Memory Section
-    memory_html = "<h2>📊 Memory Status</h2>"
+    #  Memory Section
+    memory_html = "<h2> Memory Status</h2>"
     for m in memory:
         status = "🟢 Strong" if m['retention'] > 0.7 else "🟠 Medium" if m['retention'] > 0.4 else "🔴 Weak"
 
@@ -399,8 +399,8 @@ def dashboard_ui():
         </div>
         """
 
-    # 🚨 Alerts Section
-    alert_html = "<h2>🚨 Alerts</h2>"
+    #  Alerts Section
+    alert_html = "<h2> Alerts</h2>"
     for a in alerts:
         alert_html += f"""
         <div style="padding:10px; background:red; color:white; margin:5px;">
@@ -409,10 +409,10 @@ def dashboard_ui():
         </div>
         """
 
-    # 📅 Study Plan Section
-    plan_html = "<h2>📅 Study Plan</h2>"
+    #  Study Plan Section
+    plan_html = "<h2> Study Plan</h2>"
     for p in plan:
-        type_label = "🔁 Revision" if p.get("type") == "REVISION" else "📖 Study"
+        type_label = " Revision" if p.get("type") == "REVISION" else " Study"
 
         plan_html += f"""
         <div style="padding:10px; background:green; color:white; margin:5px;">
@@ -423,12 +423,12 @@ def dashboard_ui():
     return score_html + memory_html + alert_html + plan_html
 
 
-# 🚀 Launch Dashboard
+#  Launch Dashboard
 iface = gr.Interface(
     fn=dashboard_ui,
     inputs=[],
     outputs="html",
-    title="🧠 NEET AI Dashboard",
+    title=" NEET AI Dashboard",
     description="AI-powered retention-based study planner"
 )
 

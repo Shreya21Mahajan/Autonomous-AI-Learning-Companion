@@ -1,0 +1,100 @@
+# 🔧 Install
+!pip install gradio
+
+import gradio as gr
+import json
+import os
+
+# -------------------------------
+#  Database
+# -------------------------------
+
+USER_DB = "users.json"
+
+if not os.path.exists(USER_DB):
+    with open(USER_DB, "w") as f:
+        json.dump({}, f)
+
+def load_users():
+    with open(USER_DB, "r") as f:
+        return json.load(f)
+
+def save_users(users):
+    with open(USER_DB, "w") as f:
+        json.dump(users, f)
+
+# -------------------------------
+#  Auth Functions
+# -------------------------------
+
+def signup(username, password):
+    users = load_users()
+    if username in users:
+        return " User already exists"
+    users[username] = password
+    save_users(users)
+    return " Signup successful! Now login."
+
+def login(username, password):
+    users = load_users()
+
+    if username not in users:
+        return " User not found", gr.update(visible=True), gr.update(visible=False)
+
+    if users[username] != password:
+        return " Incorrect password", gr.update(visible=True), gr.update(visible=False)
+
+    return f" Welcome {username} 🎉", gr.update(visible=False), gr.update(visible=True)
+
+# -------------------------------
+#  Dummy Dashboard (Replace later)
+# -------------------------------
+
+def dashboard():
+    return " You are now inside the AI Dashboard!"
+
+# -------------------------------
+#  UI
+# -------------------------------
+
+with gr.Blocks() as app:
+
+    gr.Markdown("##  Login System")
+
+    #  Login Section
+    with gr.Column(visible=True) as login_section:
+        username = gr.Textbox(label="Username")
+        password = gr.Textbox(label="Password", type="password")
+        login_btn = gr.Button("Login")
+        login_output = gr.Textbox()
+
+        gr.Markdown("### New user? Signup below")
+
+        signup_user = gr.Textbox(label="New Username")
+        signup_pass = gr.Textbox(label="New Password", type="password")
+        signup_btn = gr.Button("Signup")
+        signup_output = gr.Textbox()
+
+    #  Dashboard Section (hidden initially)
+    with gr.Column(visible=False) as dashboard_section:
+        gr.Markdown("## 🧠 AI Dashboard")
+        dash_output = gr.Textbox(value="Welcome to your AI system!")
+
+    # 🔗 Actions
+    login_btn.click(
+        login,
+        inputs=[username, password],
+        outputs=[login_output, login_section, dashboard_section]
+    )
+
+    signup_btn.click(
+        signup,
+        inputs=[signup_user, signup_pass],
+        outputs=signup_output
+    )
+
+# -------------------------------
+#  Launch
+# -------------------------------
+
+app.launch(share=True)
